@@ -1,6 +1,7 @@
 // lib/screens/todo_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_learning/controllers/crud_controller.dart';
 import '../controllers/todo_controller.dart'; // <--- path check karo
 
 class TodoScreen extends ConsumerStatefulWidget {
@@ -21,7 +22,9 @@ class _TodoScreenState extends ConsumerState<TodoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final todos = ref.watch(todoControllerProvider);
+    // final todos = ref.watch(todoControllerProvider);
+    final cruds = ref.watch(crudControllerProvider);
+    cruds.reversed;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Todo Screen')),
@@ -46,8 +49,11 @@ class _TodoScreenState extends ConsumerState<TodoScreen> {
                     final text = todoController.text;
                     if (text.trim().isEmpty) return;
                     // <-- call controller method via provider notifier
-                    ref.read(todoControllerProvider.notifier).addTodo(text);
-                    todoController.clear();
+                    // ref.read(todoControllerProvider.notifier).addTodo(text);
+                    ref
+                        .read(crudControllerProvider.notifier)
+                        .postCrud(todoController.text);
+                    // todoController.clear();
                   },
                   icon: const Icon(Icons.add),
                   label: const Text('Add'),
@@ -57,18 +63,18 @@ class _TodoScreenState extends ConsumerState<TodoScreen> {
             const SizedBox(height: 16),
             Expanded(
               child: ListView.builder(
-                itemCount: todos.length,
+                itemCount: cruds.length,
                 itemBuilder: (context, index) {
-                  final todo = todos[index];
+                  final crud = cruds[index];
                   return Card(
                     child: ListTile(
-                      title: Text(todo),
+                      title: Text(crud['name']),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete, color: Colors.redAccent),
                         onPressed: () {
                           ref
                               .read(todoControllerProvider.notifier)
-                              .removeTodo(todo);
+                              .removeTodo(crud);
                         },
                       ),
                     ),
@@ -78,6 +84,12 @@ class _TodoScreenState extends ConsumerState<TodoScreen> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Text("Get Data"),
+        onPressed: () {
+          ref.read(crudControllerProvider.notifier).getCrud();
+        },
       ),
     );
   }
