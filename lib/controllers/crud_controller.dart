@@ -2,7 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_learning/services/remote_service.dart';
 
 class CrudController extends StateNotifier<List> {
-  CrudController() : super([]);
+  CrudController() : super([]) {
+    getCrud();
+  }
 
   void getCrud() async {
     state = await RemoteService.getData();

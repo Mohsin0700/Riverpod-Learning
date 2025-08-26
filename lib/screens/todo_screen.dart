@@ -85,12 +85,12 @@ class _TodoScreenState extends ConsumerState<TodoScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Text("Get Data"),
-        onPressed: () {
-          ref.read(crudControllerProvider.notifier).getCrud();
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: const Text("Get Data"),
+      //   onPressed: () {
+      //     ref.read(crudControllerProvider.notifier).getCrud();
+      //   },
+      // ),
     );
   }
 }
